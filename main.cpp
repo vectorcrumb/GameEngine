@@ -4,6 +4,8 @@
 #include <Horde3DUtils.h>
 #include <GLFW/glfw3.h>
 
+#include "graphics/Renderer.h"
+
 
 const int WIN_WIDTH = 640;
 const int WIN_HEIGHT = 480;
@@ -111,6 +113,9 @@ void releaseGame(GLFWwindow* window) {
 
 
 int main(){
+
+    Renderer render = Renderer();
+
     // Window handler
     GLFWwindow* window;
 
