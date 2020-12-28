@@ -14,7 +14,7 @@ list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/include/*" "/usr/local/include
 
 add_executable(GameEngine main.cpp)
 
-target_link_libraries(GameEngine PUBLIC Horde3D Horde3DUtils glfw Eigen3 ${EXTRA_LIBS})
+target_link_libraries(GameEngine PUBLIC Horde3D Horde3DUtils glfw ${EXTRA_LIBS})
 target_include_directories(GameEngine PUBLIC
         "${PROJECT_BINARY_DIR}"
         "${EXTRA_INCLUDES}"

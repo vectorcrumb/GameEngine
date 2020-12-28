@@ -11,7 +11,8 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <iostream>
-#include "util/Logger.h"
+#include <spdlog/spdlog.h>
+#include "../util/Logger.h"
 
 
 class Renderer {
@@ -30,6 +31,7 @@ public:
     bool initResources();
     void update();
     void terminate();
+    void displayCursor(bool makeCursorVisible);
 private:
     std::string winTitle, resourcePath;
     GLFWwindow* winHandle;
@@ -40,6 +42,9 @@ private:
     bool fullScreen, showCursor;
 
     Logger* logger;
+
+    // Spawn a default camera!
+    H3DNode cam;
 };
 
 

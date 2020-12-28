@@ -11,6 +11,8 @@ const int WIN_WIDTH = 640;
 const int WIN_HEIGHT = 480;
 const int KEYS = 320;
 
+Logger* mainLogger;
+
 H3DNode model = 0, cam = 0;
 
 double deg2rad(double deg) {
@@ -113,12 +115,12 @@ void releaseGame(GLFWwindow* window) {
 
 
 int main(){
-
+    // Initialize logger first!
+    mainLogger = Logger::getInstance();
+    // Renderer object, interact with Horde3D and GLFW
     Renderer render = Renderer();
-
     // Window handler
     GLFWwindow* window;
-
     // Initialize GLFW. Set callbacks, version, buffer swap delay and window context (after creation)
     glfwSetErrorCallback(error_callback);
     if (!glfwInit()) {
