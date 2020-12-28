@@ -26,15 +26,18 @@ public:
             );
     ~Renderer();
     bool init();
-    bool initWindow();
-    bool initEngine();
-    bool initResources();
     void update();
     void terminate();
     void displayCursor(bool makeCursorVisible);
+    void configureGLFWCallbacks(GLFWerrorfun errorCallback, GLFWkeyfun keyCallback);
+    bool reloadResources();
+    GLFWwindow* winHandle;
+    // Spawn a default camera!
+    H3DNode cam;
+
+
 private:
     std::string winTitle, resourcePath;
-    GLFWwindow* winHandle;
 
     int renderDevice;
     float fov, nearPlane, farPlane;
@@ -43,8 +46,12 @@ private:
 
     Logger* logger;
 
-    // Spawn a default camera!
-    H3DNode cam;
+
+
+    bool initWindow();
+    bool initEngine();
+    bool initResources();
+
 };
 
 

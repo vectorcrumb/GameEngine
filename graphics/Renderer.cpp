@@ -4,6 +4,7 @@
 
 #include "Renderer.h"
 
+
 Renderer::Renderer(const char *title,
                    int renderDevice,
                    float fov, float nearPlane, float farPlane,
@@ -151,9 +152,6 @@ bool Renderer::initResources() {
 
     // Add resources
     H3DRes forwardPipeRes = h3dAddResource(H3DResTypes::Pipeline, "pipelines/forward.pipeline.xml", 0);
-    H3DRes modelRes = h3dAddResource(H3DResTypes::SceneGraph, "models/man/man.scene.xml", 0);
-    H3DRes animRes = h3dAddResource(H3DResTypes::Animation, "animations/man.anim", 0);
-    H3DRes skyBoxRes = h3dAddResource(H3DResTypes::SceneGraph, "models/skybox/skybox.scene.xml", 0);
     // Load resources
     if(!h3dutLoadResourcesFromDisk(resourcePath.c_str())) {
         spdlog::critical("Failed to load resources from path {}", resourcePath.c_str());
@@ -221,5 +219,16 @@ void Renderer::displayCursor(bool makeCursorVisible) {
     showCursor = makeCursorVisible;
 }
 
+void Renderer::configureGLFWCallbacks(GLFWerrorfun errorCallback, GLFWkeyfun keyCallback) {
+    glfwSetErrorCallback(errorCallback);
+    glfwSetKeyCallback(winHandle, keyCallback);
+}
 
+bool Renderer::reloadResources() {
+    if(!h3dutLoadResourcesFromDisk(resourcePath.c_str())) {
+        spdlog::critical("Failed to load resources from path {}", resourcePath.c_str());
+        return false;
+    }
+    return true;
+}
 
