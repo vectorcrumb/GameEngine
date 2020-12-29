@@ -22,19 +22,16 @@ public:
             int renderDevice = H3DRenderDevice::OpenGL4,
             float fov = 45.0f, float nearPlane = 0.1f, float farPlane = 1000.0f,
             int winWidth = 1024, int winHeight = 768,
-            bool fullScreen = false, bool showCursor = false
+            bool fullScreen = false, bool showCursor = true
             );
     ~Renderer();
     bool init();
-    void update();
+    void update(H3DNode camera);
     void terminate();
     void displayCursor(bool makeCursorVisible);
     void configureGLFWCallbacks(GLFWerrorfun errorCallback, GLFWkeyfun keyCallback);
-    bool reloadResources();
+    // TODO: Make private with a getter method
     GLFWwindow* winHandle;
-    // Spawn a default camera!
-    H3DNode cam;
-
 
 private:
     std::string winTitle, resourcePath;
@@ -50,7 +47,6 @@ private:
 
     bool initWindow();
     bool initEngine();
-    bool initResources();
 
 };
 

@@ -6,11 +6,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_subdirectory(graphics)
 add_subdirectory(util)
+add_subdirectory(scenery)
 
 find_package(glfw3 REQUIRED)
 find_package(Eigen3 REQUIRED)
-list(APPEND EXTRA_LIBS Graphics Logger)
+list(APPEND EXTRA_LIBS Graphics Logger SceneManager)
 list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/include/*" "/usr/local/include/horde3d/")
+include_directories(./scenery/scenes/)
 
 add_executable(GameEngine main.cpp)
 

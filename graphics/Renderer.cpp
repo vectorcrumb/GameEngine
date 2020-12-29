@@ -48,10 +48,10 @@ bool Renderer::init() {
     }
     spdlog::debug("Engine correctly initialized");
 
-    if (!initResources()) {
-        return false;
-    }
-    spdlog::debug("Resources correctly loaded");
+//    if (!initResources()) {
+//        return false;
+//    }
+//    spdlog::debug("Resources correctly loaded");
 
     spdlog::info("Rendering component initialization successful.");
     return true;
@@ -116,7 +116,7 @@ bool Renderer::initWindow() {
     // Configure sticky keys
     glfwSetInputMode(winHandle, GLFW_STICKY_KEYS, GL_TRUE);
     // Enable V-sync. TODO: Make this a constructor option.
-    // To disable, set interval = 0.
+    // To disable, set interval=0.
     glfwSwapInterval(1);
 
     return true;
@@ -124,14 +124,12 @@ bool Renderer::initWindow() {
 
 
 bool Renderer::initEngine() {
-
     // Initialize Horde3D engine
     if (!h3dInit((H3DRenderDevice::List) renderDevice)) {
         spdlog::critical("Unable to initialize Horde3D engine!");
         h3dutDumpMessages();
         return false;
     }
-
     // Configure engine
     h3dSetOption(H3DOptions::LoadTextures, 1);
     h3dSetOption(H3DOptions::TexCompression, 0);
@@ -144,35 +142,36 @@ bool Renderer::initEngine() {
     return true;
 }
 
-bool Renderer::initResources() {
+// TODO: Remove resource loading
+//bool Renderer::initResources() {
     // TODO: Resource loading should be dynamic?
     // TODO: Find out what each resource type does
     // TODO: Pipelines?
     // TODO: Resource manager!!
 
     // Add resources
-    H3DRes forwardPipeRes = h3dAddResource(H3DResTypes::Pipeline, "pipelines/forward.pipeline.xml", 0);
-    // Load resources
-    if(!h3dutLoadResourcesFromDisk(resourcePath.c_str())) {
-        spdlog::critical("Failed to load resources from path {}", resourcePath.c_str());
-        return false;
-    }
+//    pipeline = h3dAddResource(H3DResTypes::Pipeline, "pipelines/forward.pipeline.xml", 0);
+//    // Load resources
+//    if(!h3dutLoadResourcesFromDisk(resourcePath.c_str())) {
+//        spdlog::critical("Failed to load resources from path {}", resourcePath.c_str());
+//        return false;
+//    }
     // Add camera
-    cam = h3dAddCameraNode(H3DRootNode, "Camera", forwardPipeRes);
-    // TODO: When configuring camera viewport, the current window width and height are needed!
-    // This logic should be abstracted into another function!!
-    // Setup viewport for camera
-    h3dSetNodeParamI(cam, H3DCamera::ViewportXI, 0);
-    h3dSetNodeParamI(cam, H3DCamera::ViewportYI, 0);
-    h3dSetNodeParamI(cam, H3DCamera::ViewportWidthI, winWidth);
-    h3dSetNodeParamI(cam, H3DCamera::ViewportHeightI, winHeight);
-    h3dSetupCameraView(cam, 45.0f, (float) winWidth / winHeight, 0.5f, 2048.0f);
-    h3dResizePipelineBuffers(forwardPipeRes, winWidth, winHeight);
+//    cam = h3dAddCameraNode(H3DRootNode, "Camera", forwardPipeRes);
+//    // TODO: When configuring camera viewport, the current window width and height are needed!
+//    // This logic should be abstracted into another function!!
+//    // Setup viewport for camera
+//    h3dSetNodeParamI(cam, H3DCamera::ViewportXI, 0);
+//    h3dSetNodeParamI(cam, H3DCamera::ViewportYI, 0);
+//    h3dSetNodeParamI(cam, H3DCamera::ViewportWidthI, winWidth);
+//    h3dSetNodeParamI(cam, H3DCamera::ViewportHeightI, winHeight);
+//    h3dSetupCameraView(cam, 45.0f, (float) winWidth / winHeight, 0.5f, 2048.0f);
+//    h3dResizePipelineBuffers(forwardPipeRes, winWidth, winHeight);
     // Reposition camera
 //    h3dSetNodeTransform(cam, 0, 0, 3.0f, 0, 0, 0, 1, 1, 1);
 
-    return true;
-}
+//    return true;
+//}
 
 
 /**
@@ -182,14 +181,14 @@ bool Renderer::initResources() {
  * It must be called after the logic function inside the game loop. Running glfwPollEvents at the end
  * leaves the latest inputs ready for the game logic function.
  */
-void Renderer::update() {
+void Renderer::update(H3DNode camera) {
 
-    if (!cam) {
+    if (!camera) {
         spdlog::error("Camera pointer went null. Rendering will fail.");
         return;
     }
     // Render current scene
-    h3dRender(cam);
+    h3dRender(camera);
     h3dFinalizeFrame();
     h3dutDumpMessages();
     // Update GLFW view
@@ -219,16 +218,10 @@ void Renderer::displayCursor(bool makeCursorVisible) {
     showCursor = makeCursorVisible;
 }
 
+
+// TODO: This should be in the I/O component
 void Renderer::configureGLFWCallbacks(GLFWerrorfun errorCallback, GLFWkeyfun keyCallback) {
     glfwSetErrorCallback(errorCallback);
     glfwSetKeyCallback(winHandle, keyCallback);
-}
-
-bool Renderer::reloadResources() {
-    if(!h3dutLoadResourcesFromDisk(resourcePath.c_str())) {
-        spdlog::critical("Failed to load resources from path {}", resourcePath.c_str());
-        return false;
-    }
-    return true;
 }
 
