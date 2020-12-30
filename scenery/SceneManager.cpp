@@ -6,14 +6,14 @@
 
 bool SceneManager::init(GLFWwindow* windowHandler) {
     // Register each scene one by one here
-    registerScene(new BasicScene());
+    registerScene(std::shared_ptr<Scene>(new BasicScene()));
     // TODO: This is a bit hackish, but not loading resources in between declaring
     //  them and configuring nodes throws an ugly error. However, this might be a
     //  way of implementing lazy loading?
     // Load resources once all scenes have asked for them
     reloadResources();
     // Configure each scene and their cameras
-    for (Scene* scene : scenes) {
+    for (const auto& scene : scenes) {
         scene->configure();
         scene->configureCamera(windowHandler);
     }
@@ -21,7 +21,7 @@ bool SceneManager::init(GLFWwindow* windowHandler) {
     return true;
 }
 
-bool SceneManager::registerScene(Scene* newScene) {
+bool SceneManager::registerScene(const std::shared_ptr<Scene>& newScene) {
     scenes.push_back(newScene);
     return true;
 }
@@ -36,7 +36,7 @@ SceneManager::~SceneManager() {
     scenes.clear();
 }
 
-Scene *SceneManager::getCurrentScene() {
+std::shared_ptr<Scene> SceneManager::getCurrentScene() {
     return scenes.at(currentSceneIndex);
 }
 

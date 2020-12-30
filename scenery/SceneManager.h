@@ -6,6 +6,7 @@
 #define GAMEENGINE_SCENEMANAGER_H
 
 #include <vector>
+#include <memory>
 
 #include <Horde3DUtils.h>
 
@@ -19,12 +20,12 @@ public:
     SceneManager();
     ~SceneManager();
     bool init(GLFWwindow* windowHandler);
-    bool registerScene(Scene* newScene);
+    bool registerScene(const std::shared_ptr<Scene>& newScene);
     bool reloadResources();
 
-    Scene* getCurrentScene();
+    std::shared_ptr<Scene> getCurrentScene();
 private:
-    std::vector<Scene*> scenes;
+    std::vector<std::shared_ptr<Scene>> scenes;
     unsigned int currentSceneIndex;
     std::string resourcePath;
 

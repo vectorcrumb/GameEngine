@@ -1,10 +1,11 @@
-#include <iostream>
-#include <Horde3D.h>
+#include <functional>
+
 #include <Horde3DUtils.h>
 #include <GLFW/glfw3.h>
 
 #include "graphics/Renderer.h"
 #include "scenery/SceneManager.h"
+#include "util/Logger.h"
 
 
 /**
@@ -35,9 +36,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 }
 
 
+
 int main(){
     // Initialize logger first!
     mainLogger = Logger::getInstance();
+    spdlog::set_level(spdlog::level::trace);
+//    mainLogger->setLevel(spdlog::level::trace);
     // Renderer object, interact with Horde3D and GLFW
     Renderer render = Renderer();
     render.init();
@@ -46,7 +50,7 @@ int main(){
     // Scene manager object
     SceneManager sceneManager = SceneManager();
     // Initialize to register basic scene
-    sceneManager.init(render.winHandle);
+    sceneManager.init(render.getWindowHandle());
     // TODO: Lazy load each resource from each scene?
     // Reload resources
 //    sceneManager.reloadResources();
@@ -58,7 +62,7 @@ int main(){
     double dt, lag = 0.0;
 
     // Main loop
-    while (!glfwWindowShouldClose(render.winHandle)) {
+    while (!glfwWindowShouldClose(render.getWindowHandle())) {
         // Calculate current delta time
         currTime = glfwGetTime();
         dt = currTime - prevTime;
@@ -66,12 +70,12 @@ int main(){
         lag += dt;
         // Update key states
         for( int i = 32; i < KEYS; ++i ) {
-            setKeyState( i, glfwGetKey(render.winHandle, i) == GLFW_PRESS );
+            setKeyState( i, glfwGetKey(render.getWindowHandle(), i) == GLFW_PRESS );
         }
         // Run game loop logic
         sceneManager.getCurrentScene()->update(gKeys, dt);
         // Render next frame
-        render.update(sceneManager.getCurrentScene()->cam);
+        render.update(sceneManager.getCurrentScene()->getCam());
 
     }
     // TODO: Cleanup scenemanager memory use

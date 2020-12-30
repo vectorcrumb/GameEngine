@@ -9,6 +9,7 @@
 #include <utility>
 #include <Horde3D.h>
 #include <GLFW/glfw3.h>
+#include <spdlog/spdlog.h>
 
 class Scene {
 public:
@@ -22,9 +23,16 @@ public:
     virtual bool update(bool* keys, double dt) = 0;
     virtual bool configureCamera(GLFWwindow* windowHandler) = 0;
     std::string sceneName;
-    H3DNode cam;
+
+    H3DNode getCam() const {
+        return cam;
+    }
+
 
 protected:
+    H3DNode cam;
+    const unsigned long debugInterval = 1000;
+    unsigned long debugTimeFlag;
 };
 
 

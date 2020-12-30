@@ -11,6 +11,8 @@ Logger* Logger::instance = nullptr;
 
 
 Logger::Logger() {
+
+    logLevel = spdlog::level::trace;
     // spdlog has error handling
     try {
         time_t rawtime;
@@ -26,15 +28,15 @@ Logger::Logger() {
         }
         // Create the STDOUT log sink
         auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        console_sink->set_level(spdlog::level::debug);
+        console_sink->set_level(logLevel);
         console_sink->set_pattern("[%Y-%m-%d %T] [%^%l%$] %v ");
         // Create the file log sink
         auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(log_name, true);
-        file_sink->set_level(spdlog::level::debug);
+        file_sink->set_level(logLevel);
         // Configure default spdlog logger using file and stdout sinks
         spdlog::sinks_init_list sink_list = {file_sink, console_sink};
         spdlog::set_default_logger(std::make_shared<spdlog::logger>("GameEngine", spdlog::sinks_init_list(sink_list)));
-        spdlog::set_level(spdlog::level::debug);
+        spdlog::set_level(logLevel);
     } catch (const spdlog::spdlog_ex &ex) {
         std::cout << "Log init failed: " << ex.what() << std::endl;
         exit(50);
@@ -51,4 +53,8 @@ Logger* Logger::getInstance() {
         instance = new Logger();
     }
     return instance;
+}
+
+void Logger::setLevel(spdlog::level::level_enum newLevel) {
+    spdlog::default_logger()->set_level(newLevel);
 }

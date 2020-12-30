@@ -18,9 +18,13 @@ public:
     ~Logger();
     Logger(Logger& other) = delete;
     void operator=(const Logger &) = delete;
+    void setLevel(spdlog::level::level_enum newLevel);
+    spdlog::level::level_enum logLevel;
+
 protected:
     Logger();
     static Logger* instance;
+
 };
 
 

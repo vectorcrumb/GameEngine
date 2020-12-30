@@ -225,3 +225,7 @@ void Renderer::configureGLFWCallbacks(GLFWerrorfun errorCallback, GLFWkeyfun key
     glfwSetKeyCallback(winHandle, keyCallback);
 }
 
+GLFWwindow* Renderer::getWindowHandle() const {
+    return winHandle;
+}
+

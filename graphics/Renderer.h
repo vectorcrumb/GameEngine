@@ -22,7 +22,7 @@ public:
             int renderDevice = H3DRenderDevice::OpenGL4,
             float fov = 45.0f, float nearPlane = 0.1f, float farPlane = 1000.0f,
             int winWidth = 1024, int winHeight = 768,
-            bool fullScreen = false, bool showCursor = true
+            bool fullScreen = false, bool showCursor = false
             );
     ~Renderer();
     bool init();
@@ -30,8 +30,8 @@ public:
     void terminate();
     void displayCursor(bool makeCursorVisible);
     void configureGLFWCallbacks(GLFWerrorfun errorCallback, GLFWkeyfun keyCallback);
-    // TODO: Make private with a getter method
-    GLFWwindow* winHandle;
+
+    GLFWwindow* getWindowHandle() const;
 
 private:
     std::string winTitle, resourcePath;
@@ -43,6 +43,7 @@ private:
 
     Logger* logger;
 
+    GLFWwindow* winHandle;
 
 
     bool initWindow();
